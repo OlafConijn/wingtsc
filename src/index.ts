@@ -65,16 +65,14 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
   if (!node) return undefined;
   switch (node.type) {
     case "source": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "block": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -103,7 +101,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -132,36 +130,33 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         moduleSpecifier,
         undefined
       );
-      debugger;
-      console.log(`not implemented: ${node.type}`);
-      return undefined;
     }
 
     case "struct_definition": {
       const { nameNode } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "struct_field": {
       const { nameNode, typeNode } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "enum_definition": {
       const { enum_nameNode } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "return_statement": {
       const { expressionNode } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -177,9 +172,8 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
     }
 
     case "expression_statement": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -187,14 +181,13 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       const { implementationNode, nameNode, parentNode } =
         node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "class_implementation": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -215,7 +208,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       const { access_modifierNode, nameNode, phase_modifierNode, typeNode } =
         node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -223,14 +216,13 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       const { implementationNode, nameNode, parentNode } =
         node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "resource_implementation": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -240,7 +232,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -250,7 +242,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -290,7 +282,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
 
       const elseIfStatement = elif_conditionNode
         ? factory.createIfStatement(
-            convertNode(elif_conditionNode!, { required: true, setPos: true }),
+            removeOutermostParenthesis(convertNode(elif_conditionNode!, { required: true, setPos: true })),
             factory.createBlock(
               convertNode(elif_bloc_blockNode!, {
                 required: true,
@@ -306,7 +298,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         if (elseIfStatement) setPos(elseIfStatement, node.children[3]);
 
       return factory.createIfStatement(
-        convertNode(conditionNode, { required: true, setPos: true }),
+        removeOutermostParenthesis(convertNode(conditionNode, { required: true, setPos: true })),
         factory.createBlock(
           convertNode(blockNode, { required: true, setPos: true, array: true }),
           true
@@ -321,35 +313,34 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "duration": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "seconds": {
       const { valueNode } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "minutes": {
       const { valueNode } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "hours": {
       const { valueNode } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -361,9 +352,8 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       return factory.createStringLiteral(node.text);
 
     case "template_substitution": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -373,7 +363,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -382,16 +372,14 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       if (text[0] === '"' && text[text.length - 1] === '"') {
         return factory.createStringLiteral(text.substring(1, text.length - 2));
       }
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "keyword_argument": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -430,18 +418,11 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
     }
 
     case "new_object_id": {
-      // const {} = node as any as Record<string, SyntaxNode>;
-      // debugger;
-      // console.log(`not implemented: ${node.type}`);
-
       //as "mybucket"
       return factory.createStringLiteral(node.text.substring(4, -1));
     }
 
     case "new_object_scope": {
-      // const {} = node as any as Record<string, SyntaxNode>;
-      // debugger;
-      // console.log(`not implemented: ${node.type}`);
       return factory.createIdentifier(node.text.substring(3));
     }
 
@@ -449,14 +430,13 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       const { inflightNode, parameter_typesNode, return_typeNode } =
         node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "parameter_type_list": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -485,9 +465,8 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         default:
           console.error(`unknown builtin_type: ${node.text}`);
       }
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
     case "builtin_type": {
@@ -500,12 +479,13 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
           return factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
         case "any":
           return factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword);
+        case "void":
+          return factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword);
         default:
           console.error(`unknown builtin_type: ${node.text}`);
       }
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -515,7 +495,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -529,7 +509,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         typeNode,
       } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -544,14 +524,13 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         typeNode,
       } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "access_modifier": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -561,14 +540,13 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "parameter_list": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -578,7 +556,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -588,7 +566,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -602,7 +580,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
 
       const { argNode, opNode } = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -612,7 +590,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -620,7 +598,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       const { blockNode, parameter_listNode, return_typeNode, typeNode } =
         node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -628,29 +606,28 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       const { blockNode, parameter_listNode, return_typeNode, typeNode } =
         node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "await_expression": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "defer_expression": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "parenthesized_expression": {
-      const {} = node as any as Record<string, SyntaxNode>;
-      debugger;
-      console.log(`not implemented: ${node.type}, ${node.text}`);
-      return undefined;
+      const expression = node.children[1]; //not a named node?
+      return factory.createParenthesizedExpression(convertNode(expression, {
+        required: true,
+        setPos: true,
+      }));
     }
 
     case "array_literal": {
@@ -659,7 +636,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -673,7 +650,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         return factory.createObjectLiteralExpression([], false);
       }
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -686,7 +663,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         return factory.createObjectLiteralExpression([], false);
       }
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -696,28 +673,25 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         SyntaxNode
       >;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "map_literal_member": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "struct_literal_member": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
     case "structured_access_expression": {
-      const {} = node as any as Record<string, SyntaxNode>;
       debugger;
-      console.log(`not implemented: ${node.type}`);
+      console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
     }
 
@@ -787,6 +761,13 @@ export const parse = (sourceText: string): ts.SourceFile => {
   setPos(sourceFile, rootNode);
   return sourceFile;
 };
+
+export const removeOutermostParenthesis = (node: ts.Expression): ts.Expression => {
+  if (ts.isParenthesizedExpression(node)) {
+    return node.expression;
+  }
+  return node;
+}
 
 export const createCompilerHostFromWing = (sourceText: string) => {
   const sourceFile = parse(sourceText);

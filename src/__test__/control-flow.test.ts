@@ -7,7 +7,7 @@ describe("When parsing control flow statements", () => {
 bring cloud;
 
 let var result = 0;
-if true {
+if (true) {
   result = 1;
 } elif false {
   result = -1;

@@ -9,7 +9,7 @@ bring cloud;
 let var result = 0;
 if true {
   result = 1;
-} else if result {
+} elif false {
   result = -1;
 } else {
   result = 1;
@@ -34,7 +34,7 @@ let result = 0;
 if (true) {
     result = 1;
 }
-if (result) {
+else if (true) {
     result = -1;
 }
 else {
@@ -53,7 +53,7 @@ else {
 if (true) {
     result = 1;
 }
-if (result) {
+else if (true) {
     result = -1;
 }
 else {

@@ -258,13 +258,21 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       //todo: this seems broken
       let { blockNode, conditionNode, elif_blockNode, else_blockNode } =
         node as any as Record<string, SyntaxNode>;
-
-      let { elif_conditionNode, elif_bloc_blockNode } = (elif_blockNode ??
-        {}) as any as Record<string, SyntaxNode>;
+      let elif_conditionNode: SyntaxNode | undefined = undefined;
+      let elif_bloc_blockNode: SyntaxNode | undefined = undefined;
 
       const childTypes = node.children.map((x) => x.type);
       if (childTypes[0] == "if" && childTypes[3] == "else") {
         else_blockNode = node.children[4];
+      } else if (childTypes[0] == "if" && childTypes[3] == "elif_block") {
+        let { conditionNode: _conditionNode, blockNode: _blockNode } = (node.children[3] ??
+          {}) as any as Record<string, SyntaxNode>;
+        elif_conditionNode = _conditionNode;
+        elif_bloc_blockNode = _blockNode;
+
+        if (childTypes[4] == "else") {
+          else_blockNode = node.children[5];
+        }
       }
 
       const elseStatement = else_blockNode
@@ -278,11 +286,13 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
           )
         : undefined;
 
-      const elseIfStatement = elif_blockNode
+      if (elseStatement) setPos(elseStatement, else_blockNode);
+
+      const elseIfStatement = elif_conditionNode
         ? factory.createIfStatement(
-            convertNode(elif_conditionNode, { required: true, setPos: true }),
+            convertNode(elif_conditionNode!, { required: true, setPos: true }),
             factory.createBlock(
-              convertNode(elif_bloc_blockNode, {
+              convertNode(elif_bloc_blockNode!, {
                 required: true,
                 setPos: true,
                 array: true,
@@ -292,6 +302,8 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
             elseStatement
           )
         : undefined;
+      
+        if (elseIfStatement) setPos(elseIfStatement, node.children[3]);
 
       return factory.createIfStatement(
         convertNode(conditionNode, { required: true, setPos: true }),

@@ -1,5 +1,5 @@
 import Parser, { SyntaxNode } from "tree-sitter";
-import ts, { Expression, factory, Identifier } from "typescript";
+import ts, { Expression, factory, Identifier, PropertyName } from "typescript";
 import { libraryDefinitionAsString } from "./wingsdk";
 
 const Wing = require("@winglang/tree-sitter-wing");
@@ -88,6 +88,11 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
       >;
 
       const split = node.text.split(".");
+      if (split.length === 1) {
+        const typeName = factory.createIdentifier(split[0]);
+        setPos(typeName, node);  
+        return typeName;
+      }
       const first = factory.createIdentifier(split[0]);
       setPos(first, node, { pos: 0, end: -1 * (split[1].length + 1) });
       const second = factory.createIdentifier(split[1]);
@@ -368,10 +373,7 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
     }
 
     case "positional_argument": {
-      const text = node.text;
-      if (text[0] === '"' && text[text.length - 1] === '"') {
-        return factory.createStringLiteral(text.substring(1, text.length - 2));
-      }
+      return convertNode(node.namedChildren[0], {required: true, setPos: true})
       debugger;
       console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
@@ -388,6 +390,8 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         string,
         SyntaxNode
       >;
+
+      // const typeArgsNode = 
 
       let parameters = [] as ts.Expression[];
 
@@ -407,6 +411,18 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
           });
           setPos(convertedIdNode, idNode, { pos: 3, end: 0 });
           parameters.push(convertedIdNode);
+        }
+      }
+
+      if (argsNode) {
+        const args = convertNode<ts.Expression>(argsNode, {required: true, setPos: true, array: true});
+        parameters.push(...args);
+      }
+
+      //this should actually be done by modifying the "standard" lib.d.ts
+      if (classNode.text === "Array" && parameters.length === 1) {
+        if (ts.isArrayLiteralExpression(parameters[0])) {
+          parameters[0] = factory.createSpreadElement(parameters[0]);
         }
       }
 
@@ -631,13 +647,10 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
     }
 
     case "array_literal": {
-      const { elementNode, typeNode } = node as any as Record<
-        string,
-        SyntaxNode
-      >;
-      debugger;
-      console.log(`not implemented: ${node.type}, text: ${node.text}`);
-      return undefined;
+        return factory.createArrayLiteralExpression(
+            convertNode(node, { required: true, setPos: true, array: true }),
+            false
+          );
     }
 
     case "set_literal": {
@@ -645,23 +658,31 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
         string,
         SyntaxNode
       >;
-
-      if (elementNode === undefined && typeNode === undefined) {
-        return factory.createObjectLiteralExpression([], false);
-      }
-      debugger;
-      console.log(`not implemented: ${node.type}, text: ${node.text}`);
-      return undefined;
+      
+      return factory.createNewExpression(
+        factory.createIdentifier("Set"),
+        undefined,
+        [factory.createSpreadElement(factory.createArrayLiteralExpression(
+          convertNode(node, { required: true, setPos: true, array: true }),
+          false
+        ))]
+      );
     }
 
-    case "map_literal": {
-      const { memberNode, typeNode } = node as any as Record<
-        string,
-        SyntaxNode
-      >;
-      if (!memberNode && !typeNode) {
-        return factory.createObjectLiteralExpression([], false);
-      }
+    case "map_literal": {      
+      return factory.createAsExpression(
+        factory.createObjectLiteralExpression(
+          convertNode(node, {required: true, setPos: true, array: true}),
+          true
+        ),
+        factory.createTypeReferenceNode(
+          factory.createIdentifier("Record"),
+          [
+            factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+            factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword) //todo: something smart with inferring type of values?
+          ]
+        )
+      );
       debugger;
       console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
@@ -678,6 +699,12 @@ const createTsNode = (node: Parser.SyntaxNode): ts.Node | undefined => {
     }
 
     case "map_literal_member": {
+      if (node.namedChildCount === 2) {
+        return factory.createPropertyAssignment(
+          convertNode(node.namedChildren[0], {required: true, setPos: true}) as PropertyName,
+          convertNode(node.namedChildren[1], { required: true, setPos: true })
+        );
+      }
       debugger;
       console.log(`not implemented: ${node.type}, text: ${node.text}`);
       return undefined;
